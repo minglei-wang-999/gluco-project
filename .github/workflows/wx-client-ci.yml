@@ -1,13 +1,12 @@
 name: WeChat Mini Program CI
 
 on:
-  workflow_call:
   push:
     branches: [ main ]
     paths:
       - 'wx-client/**'
       - '!wx-client/**.md'
-      - '!wx-client/.github/**'
+      - '!wx-client/docs/**'
 
 jobs:
   build:
