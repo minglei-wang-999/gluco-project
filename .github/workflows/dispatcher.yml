@@ -31,4 +31,8 @@ jobs:
   wx-client:
     needs: changes
     if: ${{ needs.changes.outputs.wx-client == 'true' }}
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
     uses: ./.github/workflows/wx-client-ci.yml
