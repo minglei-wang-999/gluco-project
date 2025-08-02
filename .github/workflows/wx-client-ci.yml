@@ -6,9 +6,8 @@ on:
     branches: [ main ]
     paths:
       - 'wx-client/**'
-    paths-ignore:
-      - 'wx-client/**.md'
-      - 'wx-client/.github/**'
+      - '!wx-client/**.md'
+      - '!wx-client/.github/**'
 
 jobs:
   build:
