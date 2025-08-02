@@ -3,11 +3,13 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
-This is the **Gluco Backend** - a FastAPI-based web service providing nutritional analysis and glycemic impact assessment for food images. Primarily designed for WeChat Mini Program integration with dual authentication (email + WeChat users).
+This is the **Gluco Backend** - a FastAPI-based web service providing nutritional analysis and glycemic impact assessment for food images. Part of the Gluco monorepo project, primarily designed for WeChat Mini Program integration (`../wx-client`) with dual authentication (email + WeChat users).
 
 **Key Technologies:** FastAPI, SQLAlchemy, MySQL, OpenAI Vision API, WeChat integration, Docker
 
 ## Commands
+**Note:** All commands should be run from the `backend/` directory within the monorepo.
+
 - **Development:** `poetry run uvicorn app.main:app --reload`
 - **Test all:** `poetry run pytest`
 - **Test single file:** `poetry run pytest tests/test_file.py`
@@ -53,10 +55,12 @@ This is the **Gluco Backend** - a FastAPI-based web service providing nutritiona
 - Nutritional calculation prompts in `app/utils/gpt_client.py`
 - Mock responses in tests to avoid API costs
 
-**WeChat Mini Program:**
-- Authentication via OpenID in `app/routers/weixin.py`
+**WeChat Mini Program Integration:**
+- Frontend client located at `../wx-client/`
+- Authentication via OpenID in `app/routers/weixin_auth.py`
 - Cloud storage for image uploads in `app/storage/`
 - Payment processing with certificates in `certs/`
+- Frontend API calls defined in `../wx-client/utils/api.js`
 
 **Database Patterns:**
 - Always use Alembic for schema changes
