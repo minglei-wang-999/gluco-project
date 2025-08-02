@@ -1,0 +1,36 @@
+name: CI Dispatcher
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.changes.outputs.backend }}
+      wx-client: ${{ steps.changes.outputs.wx-client }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            backend:
+              - 'backend/**'
+            wx-client:
+              - 'wx-client/**'
+              - '!wx-client/**.md'
+              - '!wx-client/.github/**'
+
+  backend:
+    needs: changes
+    if: ${{ needs.changes.outputs.backend == 'true' }}
+    uses: ./.github/workflows/backend-ci.yml
+
+  wx-client:
+    needs: changes
+    if: ${{ needs.changes.outputs.wx-client == 'true' }}
+    uses: ./.github/workflows/wx-client-ci.yml

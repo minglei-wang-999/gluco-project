@@ -1,0 +1,95 @@
+name: WeChat Mini Program CI
+
+on:
+  workflow_call:
+  push:
+    branches: [ main ]
+    paths:
+      - 'wx-client/**'
+    paths-ignore:
+      - 'wx-client/**.md'
+      - 'wx-client/.github/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
+      - name: Install Dependencies
+        working-directory: ./wx-client
+        run: |
+          npm install
+          npm install -g miniprogram-ci semantic-release
+
+      - name: Semantic Release
+        working-directory: ./wx-client
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
+
+      - name: Get Version and Commit Info
+        id: info
+        working-directory: ./wx-client
+        run: |
+          VERSION=$(git describe --tags --abbrev=0)
+          COMMIT_HASH=$(git rev-parse --short HEAD)
+          COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "buildNumber=$COMMIT_HASH" >> $GITHUB_OUTPUT
+          echo "description=$COMMIT_HASH - by @$COMMIT_AUTHOR" >> $GITHUB_OUTPUT
+
+      - name: Upload version info
+        working-directory: ./wx-client
+        run: | 
+          sed -i "s/version: '1.0.0',/version: '${{ steps.info.outputs.version }}',/" pages/settings/index.js
+          sed -i "s/buildNumber: '101'/buildNumber: '${{ steps.info.outputs.buildNumber }}'/" pages/settings/index.js
+            
+      - name: Setup Private Key
+        working-directory: ./wx-client
+        run: |
+          echo "${{ secrets.WEAPP_UPLOAD_KEY }}" > private.key
+          chmod 600 private.key          
+
+      - name: Build and Upload Dev
+        working-directory: ./wx-client
+        run: |
+          cp env.dev.js env.js
+          npx miniprogram-ci upload \
+            --pp ./ \
+            --pkp ./private.key \
+            --appid ${{ secrets.WEAPP_APPID }} \
+            --uv ${{ steps.info.outputs.version }} \
+            --ud "${{ steps.info.outputs.description }}" \
+            --robot 1
+            
+      - name: Build and Upload Prod
+        working-directory: ./wx-client
+        run: |
+          cp env.prod.js env.js
+          npx miniprogram-ci upload \
+            --pp ./ \
+            --pkp ./private.key \
+            --appid ${{ secrets.WEAPP_APPID }} \
+            --uv ${{ steps.info.outputs.version }} \
+            --ud "${{ steps.info.outputs.description }}" \
+            --robot 2
+
+      - name: Cleanup
+        working-directory: ./wx-client
+        if: always()
+        run: rm -f private.key
