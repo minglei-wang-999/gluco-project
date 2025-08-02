@@ -1,0 +1,38 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    command:
+      - python
+      - '-m'
+      - debugpy
+      - '--listen'
+      - 0.0.0.0:5678
+      - '-m'
+      - uvicorn
+      - app.main:app
+      - '--host'
+      - 0.0.0.0
+      - '--port'
+      - '8000'
+      - '--reload'
+    volumes:
+      - .:/app
+    ports:
+      - '27081:8000'
+      - '5678:5678'
+    container_name: wxcloud_gluco-backend
+    labels:
+      - wxPort=27082
+      - hostPort=27081
+      - wxcloud=gluco-backend
+      - role=container
+    env_file:
+      - .env.qwen
+    environment:
+      - DATABASE_URL=mysql+pymysql://root@host.docker.internal:3306/gluco
+networks:
+  default:
+    external:
+      name: wxcb0
