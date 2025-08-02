@@ -22,8 +22,6 @@ jobs:
               - 'backend/**'
             wx-client:
               - 'wx-client/**'
-              - '!wx-client/**.md'
-              - '!wx-client/.github/**'
 
   backend:
     needs: changes
