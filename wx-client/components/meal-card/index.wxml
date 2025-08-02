@@ -1,0 +1,20 @@
+<view class="meal-card" bindtap="onTapMeal">
+  <view class="meal-time">
+    <text>{{meal.time}}</text>
+    <text class="gl-value {{meal.glCategory}}">GL: {{meal.totalGl}}</text>
+    <view wx:if="{{meal.hasDistributionIssue}}" class="warning-icon">!</view>
+  </view>
+  <view class="meal-details">
+    <view class="meal-image" wx:if="{{meal.imageUrl}}">
+      <image src="{{meal.imageUrl}}" mode="aspectFill"></image>
+    </view>
+    <view class="meal-info">
+      <view class="meal-name-container">
+        <text class="meal-name">{{meal.name}}</text>
+        <image class="meal-type-icon" src="/images/meals/{{meal.name === '早餐' ? 'breakfast' : meal.name === '午餐' ? 'lunch' : meal.name === '晚餐' ? 'dinner' : 'snack'}}.svg"></image>
+      </view>
+      <view class="meal-items">{{meal.items}}</view>
+      <view wx:if="{{meal.hasDistributionIssue}}" class="warning-text">高GL峰值</view>
+    </view>
+  </view>
+</view> 

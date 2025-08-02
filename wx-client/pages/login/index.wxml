@@ -1,0 +1,39 @@
+<view class="container">
+  <view class="login-box">
+    <view class="logo-section">
+      <image class="logo" src="/images/icon-logo.png" mode="aspectFit"></image>
+      <text class="app-name">糖分吃饭助手</text>
+    </view>
+    
+    <!-- Error message display -->
+    <view class="error-message" wx:if="{{error}}">
+      {{error}}
+    </view>
+
+    <!-- Invite code input -->
+    <!--<view class="input-group">
+      <input 
+        class="invite-input"
+        placeholder="邀请码（新用户必填）"
+        value="{{invite_code}}"
+        bindinput="onInviteCodeInput"
+        maxlength="32"
+      />
+    </view>-->
+
+    <button 
+      class="login-btn" 
+      type="primary"
+      loading="{{loading}}"
+      open-type="getUserInfo"
+      bindgetuserinfo="handleLogin"
+    >
+      开始使用
+    </button>
+    
+    <!--<view class="privacy-notice">
+      <text class="notice-text">登录即表示同意</text>
+      <navigator url="/pages/privacy/privacy" class="link">用户协议和隐私政策</navigator>
+    </view>-->
+  </view>
+</view> 

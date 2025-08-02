@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "nav-header": "/components/nav-header/index"
+  },
+  "enablePullDownRefresh": false
+} 

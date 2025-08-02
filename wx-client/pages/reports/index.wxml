@@ -1,0 +1,215 @@
+<view class="container" bindtap="onPageTap">
+  <nav-header 
+    title="报告" 
+    showDate="{{true}}" 
+    currentDate="{{dateRange.label}}"
+    bind:prev="onPrevWeek"
+    bind:next="onNextWeek"
+  />
+  
+  <view class="content" wx:if="{{!isLoading}}">
+    
+    <!-- Weekly Overview -->
+    <view class="card weekly-overview">
+      <view class="card-header">
+        <view class="card-title">每周概览</view>
+        <view 
+          class="info-btn-container"
+        >
+          <view 
+            class="info-btn {{showInfo ? 'info-btn-active' : ''}}" 
+            catchtap="toggleInfo"
+          >
+            ⓘ
+          </view>
+          
+          <!-- Info Popover -->
+          <view class="popover {{showInfo ? 'popover-visible' : ''}}" wx:if="{{showInfo}}" catchtap>
+            <view class="popover-header">
+              <text class="popover-title">小贴士</text>
+              <view class="close-btn" bindtap="toggleInfo">
+                <icon class="icon-close" type="cancel" size="16" color="#9CA3AF" />
+              </view>
+            </view>
+            
+            <view class="popover-content">
+              <text class="popover-text">这个图表显示了你一周内的所有餐点，按时间顺序排列，并根据GL值进行颜色编码。</text>
+              
+              <view class="legend-item">
+                <view class="color-dot color-low"></view>
+                <text class="legend-text">低GL ({{'<'}}20)</text>
+              </view>
+              
+              <view class="legend-item">
+                <view class="color-dot color-medium"></view>
+                <text class="legend-text">中GL (20-35)</text>
+              </view>
+              
+              <view class="legend-item">
+                <view class="color-dot color-high"></view>
+                <text class="legend-text">高GL ({{'>'}}35)</text>
+              </view>
+              
+              <text class="popover-text">餐点在6AM-12AM范围之外的时间会显示在最近的时间边界。</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- Time indicators on Y axis -->
+      <view class="weekly-grid">
+        <!-- Time markers column -->
+        <view class="time-markers">
+          <view class="time-marker">6 AM</view>
+          <view class="time-marker">10 AM</view>
+          <view class="time-marker">2 PM</view>
+          <view class="time-marker">6 PM</view>
+          <view class="time-marker">10 PM</view>
+          <view class="time-marker">12 AM</view>
+        </view>
+        
+        <!-- Visualization grid -->
+        <view class="meal-grid">
+          <!-- Time guide lines -->
+          <view class="time-guidelines">
+            <view class="guideline"></view>
+            <view class="guideline"></view>
+            <view class="guideline"></view>
+            <view class="guideline"></view>
+            <view class="guideline"></view>
+            <view class="guideline"></view>
+          </view>
+          
+          <!-- Day columns -->
+          <view class="day-columns">
+            <block wx:for="{{weeklyData}}" wx:key="day" wx:for-item="dayData">
+              <view class="day-column">
+                <!-- Meal blocks -->
+                <block wx:for="{{dayData.meals}}" wx:key="time" wx:for-item="meal">
+                  <view 
+                    class="meal-block {{meal.gl < 10 ? 'low-gl' : (meal.gl < 20 ? 'medium-gl' : 'high-gl')}}" 
+                    style="top: {{meal.position}}%;"
+                    bindtap="onTapMeal"
+                    data-meal="{{meal}}"
+                  ></view>
+                </block>
+                
+                <!-- Day label -->
+                <view class="day-label">{{dayData.day}}</view>
+              </view>
+            </block>
+          </view>
+        </view>
+      </view>
+      
+      <!-- Legend -->
+      <view class="legend">
+        <view class="legend-item">
+          <view class="legend-dot low-gl-dot"></view>
+          <text>低GL ({{'<'}}10)</text>
+        </view>
+        <view class="legend-item">
+          <view class="legend-dot medium-gl-dot"></view>
+          <text>中GL (10-20)</text>
+        </view>
+        <view class="legend-item">
+          <view class="legend-dot high-gl-dot"></view>
+          <text>高GL ({{'>'}}20)</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- Meal History -->
+    <view class="card meal-history">
+      <view class="card-title">本周记录</view>
+      
+      <view class="history-list">
+        <block wx:for="{{mealHistory}}" wx:key="day" wx:for-item="dayData">
+          <!-- Day heading -->
+          <view class="day-heading">
+            {{dayData.day}}
+          </view>
+          
+          <!-- Meals for this day -->
+          <block wx:for="{{dayData.meals}}" wx:key="time" wx:for-item="meal">
+            <meal-card meal="{{meal}}" bind:tapmeal="onTapMeal" />
+          </block>
+        </block>
+      </view>
+    </view>
+  </view>
+  
+  <view class="loading" wx:else>
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+</view>
+
+<!-- Meal Detail Modal -->
+<view class="meal-detail-modal" wx:if="{{showMealDetail}}">
+  <view class="modal-backdrop" bindtap="closeMealDetail"></view>
+  <view class="modal-content">
+    <view class="modal-header">
+      <view class="modal-title">{{selectedMeal.name}} 详情</view>
+      <view class="close-button" bindtap="closeMealDetail">×</view>
+    </view>
+    
+    <!-- Meal photo -->
+    <view class="meal-photo" wx:if="{{selectedMeal.imageUrl}}">
+      <image src="{{selectedMeal.imageUrl}}" mode="aspectFill" lazy-load="true"></image>
+    </view>
+    
+    <!-- Analysis results -->
+    <view class="analysis-results">
+      <view class="analysis-summary">
+        <view class="summary-row">
+          <text>总GL值:</text>
+          <text class="value {{selectedMeal.glCategory}}">{{selectedMeal.totalGl}}</text>
+        </view>
+        <view class="summary-row">
+          <text>碳水化合物:</text>
+          <text class="value">{{selectedMeal.totalCarbs}}g</text>
+        </view>
+        <view class="summary-row">
+          <text>蛋白质:</text>
+          <text class="value">{{selectedMeal.totalProtein}}g</text>
+        </view>
+        <view class="summary-row">
+          <text>脂肪:</text>
+          <text class="value">{{selectedMeal.totalFat}}g</text>
+        </view>
+      </view>
+      
+      <view class="category-indicator">
+        <text>血糖负荷分类: </text>
+        <text class="category-label {{selectedMeal.glCategory}}">{{selectedMeal.glCategory === 'high' ? '高' : (selectedMeal.glCategory === 'medium' ? '中' : '低')}}</text>
+      </view>
+      
+      <view class="impact-explanation">
+        <text>{{selectedMeal.notes}}</text>
+      </view>
+      
+      <view class="ingredients-title" wx:if="{{selectedMeal.ingredients.length > 0}}">食物成分</view>
+      <view class="ingredients-list" wx:if="{{selectedMeal.ingredients.length > 0}}">
+        <view wx:for="{{selectedMeal.ingredients}}" wx:key="name" class="ingredient-item">
+          <view class="ingredient-name">{{item.name}}</view>
+          <view class="ingredient-details">
+            <text>GL: {{item.gl}}</text>
+            <text class="divider">|</text>
+            <text>碳水: {{item.carbs}}g</text>
+            <text class="divider">|</text>
+            <text>蛋白质: {{item.protein}}g</text>
+            <text class="divider">|</text>
+            <text>脂肪: {{item.fat}}g</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- Share button -->
+    <view class="share-button" bindtap="onShareMeal">
+      <image class="share-icon" src="/images/icon-share.svg" />
+      <text>分享</text>
+    </view>
+  </view>
+</view> 

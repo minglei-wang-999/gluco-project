@@ -1,0 +1,11 @@
+{
+  "usingComponents": {
+    "nav-header": "/components/nav-header/index",
+    "meal-card": "/components/meal-card/index"
+  },
+  "navigationStyle": "default",
+  "enablePullDownRefresh": true,
+  "backgroundColor": "#f7f7f7",
+  "backgroundTextStyle": "dark"
+}
+ 

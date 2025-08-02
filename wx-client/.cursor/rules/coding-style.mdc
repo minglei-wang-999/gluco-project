@@ -1,0 +1,11 @@
+---
+description: coding style
+globs: 
+---
+
+# Your rule content
+
+- This is a weixin mini app repo which uses javascript to code. Please stick to chaining style when handling async processes. 
+- This app uses a backend service which has a spec in reference/openapi.json if you need to refer to. There are two user handling routes in the backend. Please use /weixin/auth only in this app. 
+- Weixin mini app documentation is in docs/ directory written in markdown. 
+

@@ -1,0 +1,91 @@
+.login-box {
+  padding: 40rpx;
+  margin-top: 120rpx;
+  min-height: 600rpx;
+}
+
+.logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 80rpx;
+}
+
+.logo {
+  width: 160rpx;
+  height: 160rpx;
+  margin-bottom: 20rpx;
+}
+
+.app-name {
+  font-size: 36rpx;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.input-group {
+  margin-bottom: 30rpx;
+  background: #f5f5f5;
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+
+.input-group input {
+  height: 80rpx;
+  line-height: 80rpx;
+  padding: 0 24rpx;
+  font-size: 32rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.invite-input::placeholder {
+  color: #bfbfbf;
+  font-size: 22rpx;
+  opacity: 1;
+} 
+
+.login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40rpx;
+  width: 100%;
+  background: #07c160;
+  color: #fff;
+  font-size: 32rpx;
+  padding: 24rpx 0;
+  border-radius: 8rpx;
+}
+
+.wechat-icon {
+  width: 48rpx;
+  height: 48rpx;
+  margin-right: 16rpx;
+}
+
+.privacy-notice {
+  margin-top: 40rpx;
+  text-align: center;
+  font-size: 24rpx;
+  color: #999;
+}
+
+.notice-text {
+  margin-right: 8rpx;
+}
+
+.link {
+  color: var(--primary-color);
+  display: inline;
+}
+
+.error-message {
+  color: #ff4d4f;
+  text-align: center;
+  font-size: 28rpx;
+  margin-bottom: 20rpx;
+  padding: 16rpx;
+  background-color: #fff2f0;
+  border-radius: 8rpx;
+} 

@@ -1,0 +1,64 @@
+{
+  "lazyCodeLoading": "requiredComponents",
+  "pages": [
+    "pages/login/index",
+    "pages/dashboard/index",
+    "pages/reports/index",
+    "pages/settings/index",
+    "pages/camera/index",
+    "pages/poster/index",
+    "pages/subscription/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "糖分吃饭助手",
+    "navigationBarTextStyle": "black",
+    "navigationStyle": "default"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#3B82F6",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/dashboard/index",
+        "text": "首页",
+        "iconPath": "images/icon-home.png",
+        "selectedIconPath": "images/icon-home-active.png"
+      },
+      {
+        "pagePath": "pages/camera/index",
+        "text": "记录",
+        "iconPath": "images/icon-log.png",
+        "selectedIconPath": "images/icon-log-active.png"
+      },
+      {
+        "pagePath": "pages/reports/index",
+        "text": "报告",
+        "iconPath": "images/icon-reports.png",
+        "selectedIconPath": "images/icon-reports-active.png"
+      },
+      {
+        "pagePath": "pages/settings/index",
+        "text": "设置",
+        "iconPath": "images/icon-settings.png",
+        "selectedIconPath": "images/icon-settings-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "permission": {
+    "scope.writePhotosAlbum": {
+      "desc": "用于保存分享海报到相册"
+    }
+  },
+  "rendererOptions": {
+    "skyline": {
+      "defaultDisplayBlock": true,
+      "defaultContentBox": true
+    }
+  }
+} 

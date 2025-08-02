@@ -1,0 +1,982 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.content {
+  padding: 16px;
+}
+
+/* Panel containing camera and controls */
+.panel {
+  width: 100%;
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+}
+
+.camera-container {
+  width: 100%;
+  height: 40vh; /* Increased from 33vh to 40vh */
+  overflow: hidden;
+  position: relative;
+  background-color: #e0e0e0;
+}
+
+/* Controls section containing time selector and analyze button */
+.controls-section {
+  padding: 16px 16px 24px 16px; /* Increased bottom padding */
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: white;
+}
+
+/* Tips Card */
+.tips-card {
+  background-color: #EFF6FF;
+  border: 1px solid #DBEAFE;
+  border-radius: 8px;
+  display: flex;
+  padding: 12px;
+  margin-top: 12px;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.tips-icon {
+  margin-right: 8px;
+  font-size: 36rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32rpx;
+  height: 32rpx;
+  color: #3B82F6;
+}
+
+.tips-content {
+  font-size: 26rpx;
+  color: #1E40AF;
+  flex: 1;
+}
+
+/* Container for centered camera button */
+.camera-button-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+/* Container for gallery button in bottom right */
+.gallery-button-container {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ingredients-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.ingredients-list-header .time-selector {
+  flex-shrink: 0;
+  margin-left: 10px;
+}
+
+.time-icon {
+  margin-right: 10px;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.time-icon image {
+  width: 100%;
+  height: 100%;
+}
+
+.time-picker-view {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #333;
+  background-color: #f0f0f0;
+  border-radius: 20px;
+  padding: 4px 10px;
+  min-width: 120px;
+  max-width: 160px;
+  position: relative;
+}
+
+.time-picker-container {
+  position: relative;
+  z-index: 10;
+}
+
+.dropdown-icon {
+  position: absolute;
+  right: 10px;
+  font-size: 12px;
+  color: #666;
+}
+
+/* Analyze button */
+.analyze-button {
+  margin: 20px auto 0;
+  background-color: #3B82F6;
+  color: white;
+  border-radius: 20px;
+  padding: 12px 0;
+  width: 100%;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Analyze button in processing state */
+.analyze-button-processing {
+  background-color: #EF4444; /* Red background */
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Analyze button in disabled state */
+.analyze-button-disabled {
+  background-color: #9CA3AF; /* Gray background */
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.8;
+}
+
+/* Progress fill inside button */
+.analyze-button .progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: #3B82F6; /* Original blue color */
+  z-index: 1;
+  transition: width 0.3s ease;
+}
+
+/* Pulsing animation for pending state */
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+/* Apply pulsing animation when width is 0% */
+.analyze-button .progress-fill[style*="width: 0%"] {
+  width: 10% !important; /* Override inline style */
+  animation: pulse 1.5s infinite;
+  background-color: #3B82F6; /* Keep the original blue color */
+}
+
+/* Text inside button should be above the progress fill */
+.analyze-button text {
+  position: relative;
+  z-index: 2;
+  color: white; /* Ensure text is white */
+}
+
+.camera-button {
+  width: 60px;
+  height: 60px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.camera-button image {
+  width: 30px;
+  height: 30px;
+}
+
+.camera-text {
+  color: #a0a0a0;
+  font-size: 12px;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.camera-button-container .camera-text {
+  margin-top: 10px;
+}
+
+.gallery-button {
+  width: 50px;
+  height: 50px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.gallery-button image {
+  width: 24px;
+  height: 24px;
+}
+
+/* Container for capture button at the bottom */
+.capture-button-container {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.capture-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.capture-button image {
+  width: 36px;
+  height: 36px;
+}
+
+
+/* Analysis Results Styles */
+.analysis-panel {
+  width: 100%;
+  margin-bottom: 16px;
+  padding-bottom: 20px;
+}
+
+.text-analysis, .ingredients-list {
+  padding: 16px;
+}
+
+/* Ingredients List Styles */
+.analysis-section-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.ingredients-list-header .analysis-section-title {
+  margin-bottom: 0;
+}
+
+.add-ingredient-button {
+  width: 28px;
+  height: 28px;
+  background-color: #3B82F6;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+  margin: 16px auto;
+  line-height: 1;
+  padding-bottom: 2px; /* Adjust the vertical position of the + sign */
+}
+
+.add-ingredient-button text {
+  display: block;
+  text-align: center;
+}
+
+.ingredients-table-header {
+  display: flex;
+  padding: 8px 0;
+  border-bottom: 1px solid #eaeaea;
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.ingredient-name-header {
+  flex: 2;
+  padding-left: 8px;
+}
+
+.ingredient-portion-header {
+  flex: 1;
+  text-align: center;
+}
+
+.ingredient-gi-header {
+  flex: 1;
+  text-align: center;
+}
+
+.ingredient-action-header {
+  width: 40px;
+}
+
+.ingredients-list-container {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.ingredient-item {
+  display: flex;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+  align-items: center;
+  position: relative;
+}
+
+.ingredient-name {
+  flex: 2;
+  font-size: 14px;
+  color: #333;
+  padding-left: 8px;
+  padding-right: 10px;
+  box-sizing: border-box;
+}
+
+.ingredient-portion {
+  flex: 1;
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0 5px;
+}
+
+.edit-icon {
+  font-size: 12px;
+  color: #999;
+  margin-left: 4px;
+}
+
+.ingredient-gi {
+  flex: 1;
+  font-size: 14px;
+  text-align: center;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gi-low {
+  color: #10B981;
+}
+
+.gi-medium {
+  color: #F59E0B;
+}
+
+.gi-high {
+  color: #EF4444;
+}
+
+.gi-pending {
+  color: transparent; /* Make the text transparent instead of showing a pending state */
+}
+
+.gi-info-text {
+  color: #6B7280;
+  font-size: 14px;
+  font-style: italic;
+  padding: 8px 0;
+}
+
+.pending-note {
+  display: block;
+  color: #6B7280;
+  font-size: 12px;
+  font-style: italic;
+  margin-top: 4px;
+  text-align: center;
+}
+
+.pending-text {
+  color: #9CA3AF;
+  font-size: 12px;
+  font-style: italic;
+  text-align: center;
+}
+
+.inline-input {
+  width: 100%;
+  height: 28px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 0 8px;
+  font-size: 14px;
+  color: #333;
+  background-color: #f9f9f9;
+}
+
+.portion-adjuster-inline {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  height: 28px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.portion-decrease, .portion-increase {
+  min-width: 28px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 500;
+  color: #3B82F6;
+  background-color: #EBF5FF;
+  cursor: pointer;
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.portion-decrease {
+  border-right: 1px solid #e0e0e0;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.portion-increase {
+  border-left: 1px solid #e0e0e0;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.portion-input {
+  flex: 1;
+  height: 100%;
+  border: none;
+  text-align: center;
+  font-size: 14px;
+  color: #333;
+  background-color: transparent;
+  min-width: 40px;
+}
+
+.portion-unit {
+  font-size: 14px;
+  color: #666;
+  margin-right: 4px;
+}
+
+.ingredient-delete {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #EF4444;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.total-gl-summary {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 8px;
+  margin-top: 12px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  align-items: center;
+}
+
+.total-gl-label {
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+}
+
+.gl-value-container {
+  display: flex;
+  align-items: center;
+}
+
+.total-gl-value {
+  font-size: 15px;
+  font-weight: 600;
+  margin-right: 12px;
+}
+
+.reanalysis-button {
+  background-color: #3B82F6;
+  color: white;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reanalysis-button text {
+  color: white;
+}
+
+.processing-indicator {
+  display: flex;
+  align-items: center;
+}
+
+.processing-text {
+  font-size: 12px;
+  color: #6B7280;
+  margin-left: 8px;
+}
+
+.gl-low {
+  color: #10B981;
+}
+
+.gl-medium {
+  color: #F59E0B;
+}
+
+.gl-high {
+  color: #EF4444;
+}
+
+.gl-pending {
+  color: #9CA3AF;
+}
+
+.empty-ingredients {
+  padding: 24px 0;
+  text-align: center;
+  color: #999;
+  font-size: 14px;
+}
+
+/* Ingredient Details Panel */
+.ingredient-details-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.panel-header text {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.close-button {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  color: #666;
+}
+
+.ingredient-details-content {
+  padding: 16px;
+}
+
+.ingredient-info {
+  margin-bottom: 16px;
+}
+
+.ingredient-name-large {
+  font-size: 18px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.ingredient-category {
+  font-size: 14px;
+  color: #666;
+}
+
+.nutrition-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.nutrition-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.nutrition-label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.nutrition-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.portion-adjuster {
+  margin-bottom: 20px;
+}
+
+.adjuster-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.adjuster-controls {
+  display: flex;
+  align-items: center;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.decrease-button, .increase-button {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
+  font-size: 18px;
+  font-weight: 500;
+  color: #333;
+}
+
+.portion-display {
+  flex: 1;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  color: #333;
+  background-color: white;
+}
+
+.update-button {
+  background-color: #3B82F6;
+  color: white;
+  border-radius: 8px;
+  padding: 12px 0;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* Add Ingredient Panel */
+.add-ingredient-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.add-ingredient-content {
+  padding: 16px;
+}
+
+.search-box {
+  margin-bottom: 16px;
+}
+
+.search-box input {
+  width: 100%;
+  height: 40px;
+  border-radius: 20px;
+  background-color: #f5f5f5;
+  padding: 0 16px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.search-results {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 16px;
+}
+
+.search-result-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 8px;
+  border-bottom: 1px solid #f0f0f0;
+  align-items: center;
+}
+
+.result-name {
+  font-size: 14px;
+  color: #333;
+}
+
+.result-gi {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.no-results {
+  padding: 24px 0;
+  text-align: center;
+  color: #999;
+  font-size: 14px;
+}
+
+.manual-entry-form {
+  margin-top: 16px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.form-group input {
+  width: 100%;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid #eaeaea;
+  padding: 0 12px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.add-button {
+  background-color: #3B82F6;
+  color: white;
+  border-radius: 8px;
+  padding: 12px 0;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
+  margin-top: 16px;
+}
+
+.add-custom-button {
+  padding: 12px 0;
+  text-align: center;
+  font-size: 14px;
+  color: #3B82F6;
+  border: 1px dashed #3B82F6;
+  border-radius: 8px;
+  margin-top: 16px;
+}
+
+/* Record Button */
+.record-button-container {
+  padding: 0 16px 16px;
+}
+
+.record-button {
+  background-color: #10B981;
+  color: white;
+  border-radius: 8px;
+  padding: 12px 0;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+}
+
+/* Analysis Content */
+.analysis-content {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+  padding: 16px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+/* User Comment Section Styles */
+.user-comment-section {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  padding: 0 16px;
+}
+
+/* Comment Examples Styles */
+.comment-examples {
+  background-color: #F0F9FF;
+  border: 1px solid #BAE6FD;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.examples-title {
+  font-weight: 500;
+  color: #0369A1;
+  margin-bottom: 8px;
+  font-size: 26rpx;
+}
+
+.example-prompt {
+  font-size: 24rpx;
+  color: #0C4A6E;
+  padding: 4px 0;
+  position: relative;
+  padding-left: 16px;
+}
+
+.example-prompt::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #0EA5E9;
+}
+
+.comment-input-container {
+  display: flex;
+  align-items: flex-start;
+  background-color: #F9FAFB;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+  padding: 8px;
+}
+
+.comment-input {
+  flex: 1;
+  min-height: 36px;
+  font-size: 28rpx;
+  padding: 8px 0;
+  line-height: 1.4;
+  color: #4B5563;
+}
+
+.comment-button {
+  margin-left: 12px;
+  background-color: #3B82F6;
+  color: white;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 26rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  min-width: 100rpx;
+  height: 20px;
+}
+
+.comment-button text {
+  color: white;
+}
+
+.time-selector {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 0;
+}
+
+.ingredients-list-header .time-selector {
+  flex-shrink: 0;
+  margin-left: 10px;
+}
+
+/* Loading spinner for GI value */
+.loading-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: #3B82F6;
+  animation: spin 1s ease-in-out infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.reanalysis-button-container {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+}

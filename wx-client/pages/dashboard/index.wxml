@@ -1,0 +1,176 @@
+<wxs module="utils">
+  function calculateHeight(gl) {
+    if (gl <= 0) return 0;
+    var height = (gl / 35) * 100;
+    return height < 10 ? 10 : height;
+  }
+  
+  module.exports = {
+    calculateHeight: calculateHeight
+  };
+</wxs>
+
+<view class="container">
+  <nav-header 
+    title="首页" 
+    showDate="{{true}}" 
+    currentDate="{{today}}"
+    bind:prev="onPrevDay"
+    bind:next="onNextDay"
+  />
+  
+  <view class="content" wx:if="{{!isLoading}}">
+    <!-- Pull to refresh hint as dismissable tips card -->
+    <view class="tips-card" wx:if="{{showRefreshHint}}">
+      <view class="tips-icon">ⓘ</view>
+      <view class="tips-content">
+        <text>下拉刷新数据以获取最新信息</text>
+      </view>
+      <view class="dismiss-button" bindtap="dismissRefreshHint">×</view>
+    </view>
+    
+    <!-- GL Distribution and Summary -->
+    <view class="card gl-summary">
+      <view class="summary-header">
+        <view class="summary-title">
+          <text>今日GL: </text>
+          <text style="color: {{getGLColor(currentGL, dailyGoal)}}">{{currentGL}}/{{dailyGoal}}</text>
+        </view>
+      </view>
+      
+      <!-- Visual distribution graph -->
+      <view class="distribution-graph">
+        <view wx:for="{{hourlyData}}" wx:key="hour" class="graph-bar-container" style="left: {{(index / hourlyData.length) * 95}}%; margin: 0 5%;">
+          <view 
+            class="graph-bar {{item.gl > 25 ? 'high-gl' : (item.gl > 15 ? 'medium-gl' : 'low-gl')}}" 
+            style="height: {{utils.calculateHeight(item.gl)}}%">
+          </view>
+        </view>
+        
+        <!-- Guide lines -->
+        <view class="ideal-line"></view>
+        <view class="max-threshold-line"></view>
+      </view>
+      
+      <!-- Time labels -->
+      <view class="time-labels">
+        <text>6AM</text>
+        <text>12PM</text>
+        <text>6PM</text>
+        <text>12AM</text>
+      </view>
+      
+      <view class="legend">
+        <view class="legend-item">
+          <view class="legend-dot ideal-dot"></view>
+          <text>理想范围</text>
+        </view>
+        <view class="legend-item">
+          <view class="legend-dot threshold-dot"></view>
+          <text>最大阈值</text>
+        </view>
+      </view>
+    </view>
+        
+    <!-- Meal Timeline -->
+    <view class="card meal-timeline">
+      <view class="card-header">
+        <text class="card-title">今日餐饮</text>
+        <view class="view-more" bindtap="onViewHistory">
+          <text class="history-text">历史</text>
+          <image class="arrow-icon" src="/images/icon-right.svg" />
+        </view>
+      </view>
+      
+      <view class="meals-list">
+        <block wx:for="{{meals}}" wx:key="id">
+          <meal-card meal="{{item}}" bind:tapmeal="onTapMeal" />
+        </block>
+        
+        <view class="suggested-snack">
+          <view class="snack-timeline"></view>
+          <view class="snack-text"></view>
+        </view>
+        
+        <view class="add-meal-button" bindtap="onTapAddMeal">
+          <text class="add-icon">+</text>
+          <text>添加餐食</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <view class="loading" wx:else>
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+  
+  <!-- Meal Detail Modal -->
+  <view class="meal-detail-modal" wx:if="{{showMealDetail}}">
+    <view class="modal-backdrop" bindtap="closeMealDetail"></view>
+    <view class="modal-content">
+      <view class="modal-header">
+        <view class="modal-title">{{selectedMeal.name}} 详情</view>
+        <view class="close-button" bindtap="closeMealDetail">×</view>
+      </view>
+      
+      <!-- Meal photo -->
+      <view class="meal-photo" wx:if="{{selectedMeal.imageUrl}}">
+        <image src="{{selectedMeal.imageUrl}}" mode="aspectFill" lazy-load="true"></image>
+      </view>
+      
+      <!-- Analysis results -->
+      <view class="analysis-results">
+        <view class="analysis-summary">
+          <view class="summary-row">
+            <text>总GL值:</text>
+            <text class="value {{selectedMeal.glCategory}}">{{selectedMeal.totalGl}}</text>
+          </view>
+          <view class="summary-row">
+            <text>碳水化合物:</text>
+            <text class="value">{{selectedMeal.totalCarbs}}g</text>
+          </view>
+          <view class="summary-row">
+            <text>蛋白质:</text>
+            <text class="value">{{selectedMeal.totalProtein}}g</text>
+          </view>
+          <view class="summary-row">
+            <text>脂肪:</text>
+            <text class="value">{{selectedMeal.totalFat}}g</text>
+          </view>
+        </view>
+        
+        <view class="category-indicator">
+          <text>血糖负荷分类: </text>
+          <text class="category-label {{selectedMeal.glCategory}}">{{selectedMeal.glCategory === 'high' ? '高' : (selectedMeal.glCategory === 'medium' ? '中' : '低')}}</text>
+        </view>
+        
+        <view class="impact-explanation">
+          <text>{{selectedMeal.notes}}</text>
+        </view>
+        
+        <view class="ingredients-title" wx:if="{{selectedMeal.ingredients.length > 0}}">食物成分</view>
+        <view class="ingredients-list" wx:if="{{selectedMeal.ingredients.length > 0}}">
+          <view wx:for="{{selectedMeal.ingredients}}" wx:key="name" class="ingredient-item">
+            <view class="ingredient-name">{{item.name}}</view>
+            <view class="ingredient-details">
+              <text>GL: {{item.gl}}</text>
+              <text class="divider">|</text>
+              <text>碳水: {{item.carbs}}g</text>
+              <text class="divider">|</text>
+              <text>蛋白质: {{item.protein}}g</text>
+              <text class="divider">|</text>
+              <text>脂肪: {{item.fat}}g</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- Share button -->
+      <view class="share-button" bindtap="onShareMeal">
+        <image class="share-icon" src="/images/icon-share.svg" />
+        <text>分享</text>
+      </view>
+    </view>
+  </view>
+</view> 

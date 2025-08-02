@@ -1,0 +1,467 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #F3F4F6;
+}
+
+.content {
+  flex: 1;
+  padding: 0px;
+}
+
+/* Step 1: Capture */
+.capture-area {
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  height: 500rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.camera-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #9CA3AF;
+}
+
+.camera-icon {
+  font-size: 80rpx;
+  margin-bottom: 16px;
+}
+
+.camera-text {
+  font-size: 28rpx;
+}
+
+/* Step 2: Analysis */
+.analysis-container {
+  margin-bottom: 20px;
+}
+
+.resize-canvas {
+  position: fixed;
+  left: -9999px;
+  width: 800px;  /* Match the MAX_SIZE in resizeImage function */
+  height: 800px;
+  visibility: hidden;
+}
+
+.photo-preview {
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  height: 300rpx;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.photo-preview image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.analysis-results {
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  padding: 16px;
+}
+
+.analysis-summary {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.summary-row {
+  width: 50%;
+  padding: 8px 0;
+  display: flex;
+  align-items: center;
+}
+
+.summary-row text {
+  font-size: 28rpx;
+}
+
+.summary-row .value {
+  font-weight: 500;
+  margin-left: 8px;
+}
+
+.value.high {
+  color: #EF4444;
+}
+
+.value.medium {
+  color: #F59E0B;
+}
+
+.value.low {
+  color: #10B981;
+}
+
+.category-indicator {
+  background-color: #F3F4F6;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  font-size: 28rpx;
+}
+
+.category-label {
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-left: 4px;
+  color: #FFFFFF;
+}
+
+.category-label.high {
+  background-color: #EF4444;
+}
+
+.category-label.medium {
+  background-color: #F59E0B;
+}
+
+.category-label.low {
+  background-color: #10B981;
+}
+
+.impact-explanation {
+  margin-bottom: 16px;
+  font-size: 28rpx;
+  color: #4B5563;
+  line-height: 1.4;
+}
+
+.best-time {
+  margin-bottom: 16px;
+  font-size: 28rpx;
+  color: #4B5563;
+}
+
+.best-time .label {
+  color: #1F2937;
+  font-weight: 500;
+}
+
+.ingredients-title {
+  font-size: 30rpx;
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: #1F2937;
+}
+
+.ingredients-list {
+  margin-bottom: 20px;
+}
+
+.ingredient-item {
+  padding: 12px 0;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.ingredient-name {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 500;
+  margin-bottom: 4px;
+  font-size: 28rpx;
+}
+
+.ingredient-portion {
+  font-size: 14px;
+  color: #666;
+  margin-left: 8px;
+}
+
+.ingredient-details {
+  display: flex;
+  flex-wrap: wrap;
+  color: #6B7280;
+  font-size: 24rpx;
+}
+
+.ingredient-details text {
+  margin-right: 8px;
+}
+
+.divider {
+  color: #D1D5DB;
+  margin: 0 4px;
+}
+
+/* User Comment Section Styles */
+.user-comment-section {
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+/* Comment Examples Styles */
+.comment-examples {
+  background-color: #F0F9FF;
+  border: 1px solid #BAE6FD;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.examples-title {
+  font-weight: 500;
+  color: #0369A1;
+  margin-bottom: 8px;
+  font-size: 26rpx;
+}
+
+.example-prompt {
+  font-size: 24rpx;
+  color: #0C4A6E;
+  padding: 4px 0;
+  position: relative;
+  padding-left: 16px;
+}
+
+.example-prompt::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #0EA5E9;
+}
+
+.comment-input-container {
+  display: flex;
+  align-items: flex-start;
+  background-color: #F9FAFB;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+  padding: 8px;
+}
+
+.comment-input {
+  flex: 1;
+  min-height: 36px;
+  font-size: 28rpx;
+  padding: 8px 0;
+  line-height: 1.4;
+  color: #4B5563;
+}
+
+.comment-button {
+  margin-left: 12px;
+  background-color: #3B82F6;
+  color: white;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 26rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  min-width: 100rpx;
+  height: 20px;
+}
+
+.comment-button text {
+  color: white;
+}
+
+.tips-container {
+  background-color: #FFFBEB;
+  border: 1px solid #FEF3C7;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 20px;
+}
+
+.tips-title {
+  font-weight: 500;
+  color: #92400E;
+  margin-bottom: 8px;
+  font-size: 28rpx;
+}
+
+.tip-item {
+  display: flex;
+  margin-bottom: 8px;
+  font-size: 24rpx;
+  color: #92400E;
+}
+
+.tip-bullet {
+  margin-right: 8px;
+}
+
+.button-container {
+  margin-top: 24px;
+}
+
+.submit-button {
+  background-color: #3B82F6;
+  color: white;
+  border-radius: 8px;
+  padding: 10px 0;
+  font-size: 28rpx;
+  font-weight: 500;
+  border: none;
+}
+
+/* Step 3: Confirmation */
+.confirmation-container {
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  padding: 32px 16px;
+  text-align: center;
+}
+
+.success-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 120rpx;
+  height: 120rpx;
+  background-color: #10B981;
+  color: white;
+  border-radius: 50%;
+  font-size: 60rpx;
+  margin: 0 auto 20px;
+}
+
+.success-title {
+  font-size: 40rpx;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #1F2937;
+}
+
+.success-message {
+  font-size: 28rpx;
+  color: #6B7280;
+  margin-bottom: 24px;
+  line-height: 1.4;
+}
+
+.gl-indicator {
+  background-color: #F3F4F6;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 32px;
+  font-size: 32rpx;
+}
+
+.gl-value {
+  font-weight: 600;
+}
+
+.back-button {
+  background-color: #3B82F6;
+  color: white;
+  border-radius: 8px;
+  padding: 10px 0;
+  font-size: 28rpx;
+  font-weight: 500;
+  border: none;
+}
+
+/* Loading Overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.loading-content {
+  background-color: white;
+  padding: 32px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loading-spinner {
+  border: 4rpx solid #F3F4F6;
+  border-top: 4rpx solid #3B82F6;
+  border-radius: 50%;
+  width: 48rpx;
+  height: 48rpx;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Camera interface styles */
+.camera-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.camera-view {
+  width: 100%;
+  height: 100%;
+}
+
+.camera-controls {
+  position: absolute;
+  bottom: 80rpx;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.capture-button {
+  width: 140rpx;
+  height: 140rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.library-button {
+  position: absolute;
+  right: 60rpx;
+  bottom: 20rpx;
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 60rpx;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.library-icon {
+  width: 50rpx;
+  height: 50rpx;
+}
+
+.library-icon image {
+  width: 100%;
+  height: 100%;
+} 

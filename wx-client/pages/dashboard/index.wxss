@@ -1,0 +1,487 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #F3F4F6;
+}
+
+.content {
+  padding: 16px;
+}
+
+/* Pull to refresh hint */
+.pull-refresh-hint {
+  text-align: center;
+  padding: 8rpx 0 16rpx;
+  color: #9CA3AF;
+  font-size: 24rpx;
+  margin-bottom: 8rpx;
+}
+
+.card {
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+/* GL Summary Section */
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.summary-title {
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+.stability {
+  display: flex;
+  align-items: center;
+}
+
+.stability-label {
+  font-size: 24rpx;
+  color: #6B7280;
+  margin-right: 4px;
+}
+
+.stability-score {
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+/* Distribution Graph */
+.distribution-graph {
+  position: relative;
+  height: 128rpx;
+  background-color: #F3F4F6;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+  padding: 0 15rpx; /* Add padding equal to half the bar width */
+}
+
+.graph-bar-container {
+  position: absolute;
+  bottom: 0;
+  width: 30rpx;
+  height: 100%;
+  transform: translateX(-50%);
+}
+
+.graph-bar {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+
+.low-gl {
+  background-color: #60A5FA;
+}
+
+.medium-gl {
+  background-color: #10B981;
+}
+
+.high-gl {
+  background-color: #EF4444;
+}
+
+/* assume the max threshold (red line) of the graph is 150 GL. 110% of 150 is 165 GL */
+.ideal-line {
+  position: absolute;
+  top: 60%;
+  left: 0;
+  right: 0;
+  border-top: 2px dashed #93C5FD;
+}
+
+.max-threshold-line {
+  position: absolute;
+  top: 10%;
+  left: 0;
+  right: 0;
+  border-top: 1px dotted #FCA5A5;
+}
+
+/* Time Labels */
+.time-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 24rpx;
+  color: #6B7280;
+  margin-bottom: 8px;
+}
+
+/* Legend */
+.legend {
+  display: flex;
+  font-size: 24rpx;
+  color: #6B7280;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+}
+
+.legend-dot {
+  width: 8rpx;
+  height: 8rpx;
+  border-radius: 50%;
+  margin-right: 4px;
+}
+
+.ideal-dot {
+  background-color: #93C5FD;
+}
+
+.threshold-dot {
+  background-color: #FCA5A5;
+}
+
+/* Tips Card */
+.tips-card {
+  background-color: #EFF6FF;
+  border: 1px solid #DBEAFE;
+  border-radius: 8px;
+  display: flex;
+  padding: 12px;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.tips-icon {
+  margin-right: 8px;
+  font-size: 36rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32rpx;
+  height: 32rpx;
+}
+
+.tips-icon image {
+  width: 100%;
+  height: 100%;
+}
+
+.tips-content {
+  font-size: 28rpx;
+  color: #1E40AF;
+  flex: 1;
+}
+
+.dismiss-button {
+  position: absolute;
+  top: 8rpx;
+  right: 12rpx;
+  width: 40rpx;
+  height: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  color: #9CA3AF;
+  cursor: pointer;
+}
+
+/* Meal Timeline */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.card-title {
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+.view-more {
+  display: flex;
+  align-items: center;
+  padding: 10rpx 20rpx;
+  background-color: #f1f3f5;
+  border-radius: 15rpx;
+  cursor: pointer;
+}
+
+.history-text {
+  color: #007aff;
+  margin-right: 8rpx;
+}
+
+.arrow-icon {
+  width: 30rpx;
+  height: 30rpx;
+  fill: #007aff;
+}
+
+/* Suggested Snack */
+.suggested-snack {
+  display: flex;
+  padding: 4px 0;
+  margin-left: 8px;
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.snack-timeline {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2rpx;
+  background-color: #D1D5DB;
+}
+
+.snack-text {
+  padding-left: 24px;
+  font-size: 24rpx;
+  color: #9CA3AF;
+  font-style: italic;
+}
+
+/* Add Meal Button */
+.add-meal-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  border: 1px dashed #D1D5DB;
+  border-radius: 8px;
+  color: #3B82F6;
+  font-size: 28rpx;
+}
+
+.add-icon {
+  margin-right: 4px;
+  font-size: 32rpx;
+}
+
+/* Loading */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  color: #6B7280;
+}
+
+.loading-spinner {
+  border: 4rpx solid #F3F4F6;
+  border-top: 4rpx solid #3B82F6;
+  border-radius: 50%;
+  width: 48rpx;
+  height: 48rpx;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Meal Detail Modal */
+.meal-detail-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1001;
+}
+
+.modal-content {
+  position: relative;
+  width: 90%;
+  max-height: 80vh;
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1002;
+  overflow-y: auto;
+  padding-bottom: 20px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.close-button {
+  font-size: 40rpx;
+  color: #6B7280;
+  padding: 0 10rpx;
+}
+
+.meal-photo {
+  width: 100%;
+  height: 400rpx;
+  overflow: hidden;
+}
+
+.meal-photo image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.analysis-results {
+  padding: 16px;
+}
+
+.analysis-summary {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.summary-row {
+  width: 50%;
+  padding: 8px 0;
+  display: flex;
+  align-items: center;
+}
+
+.summary-row text {
+  font-size: 28rpx;
+}
+
+.summary-row .value {
+  font-weight: 500;
+  margin-left: 8px;
+}
+
+.value.high {
+  color: #EF4444;
+}
+
+.value.medium {
+  color: #F59E0B;
+}
+
+.value.low {
+  color: #10B981;
+}
+
+.category-indicator {
+  background-color: #F3F4F6;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  font-size: 28rpx;
+}
+
+.category-label {
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-left: 4px;
+  color: #FFFFFF;
+}
+
+.category-label.high {
+  background-color: #EF4444;
+}
+
+.category-label.medium {
+  background-color: #F59E0B;
+}
+
+.category-label.low {
+  background-color: #10B981;
+}
+
+.impact-explanation {
+  font-size: 28rpx;
+  color: #4B5563;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.ingredients-title {
+  font-size: 30rpx;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.ingredients-list {
+  margin-bottom: 16px;
+}
+
+.ingredient-item {
+  padding: 10px;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.ingredient-name {
+  font-size: 28rpx;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.ingredient-details {
+  font-size: 24rpx;
+  color: #6B7280;
+}
+
+.divider {
+  margin: 0 6px;
+  color: #D1D5DB;
+}
+
+/* Share button */
+.share-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 24rpx 32rpx;
+  padding: 20rpx;
+  background: #3B82F6;
+  border-radius: 8rpx;
+  color: #FFFFFF;
+  font-size: 28rpx;
+  cursor: pointer;
+}
+
+.share-icon {
+  width: 36rpx;
+  height: 36rpx;
+  margin-right: 12rpx;
+  filter: brightness(0) invert(1);
+} 

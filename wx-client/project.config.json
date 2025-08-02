@@ -1,0 +1,30 @@
+{
+  "appid": "wxf67a9be22caa7eff",
+  "compileType": "miniprogram",
+  "libVersion": "3.7.8",
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "setting": {
+    "coverView": true,
+    "es6": true,
+    "postcss": true,
+    "minified": true,
+    "enhance": true,
+    "showShadowRootInWxmlPanel": true,
+    "packNpmRelationList": [],
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "skylineRenderEnable": true,
+    "skylineRenderVersion": "latest"
+  },
+  "condition": {},
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
+  }
+}
