@@ -1,0 +1,59 @@
+.header {
+  padding: 10px 15px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title-section {
+  display: flex;
+  align-items: center;
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  color: #3B82F6;
+  font-size: 28rpx;
+  margin-right: 15px;
+}
+
+.back-icon {
+  margin-right: 4px;
+  font-size: 32rpx;
+}
+
+.title {
+  font-size: 34rpx;
+  font-weight: 500;
+  color: #333333;
+}
+
+.date-nav {
+  display: flex;
+  align-items: center;
+}
+
+.date-nav-button {
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #999999;
+}
+
+.nav-icon {
+  font-size: 32rpx;
+}
+
+.current-date {
+  margin: 0 10px;
+  font-size: 28rpx;
+  font-weight: 500;
+} 

@@ -1,0 +1,89 @@
+<!--pages/settings/index.wxml-->
+<view class="container">
+  <nav-header 
+    title="设置" 
+  />
+  
+  <view class="content" wx:if="{{!isLoading}}">
+    <!-- User Profile Section -->
+    <view class="card user-profile">
+      <block wx:if="{{isLogin && userInfo}}">
+        <view class="user-info">
+          <view class="avatar-container">
+            <image class="avatar" src="{{userInfo.avatar_url || '/images/icon-user.svg'}}" mode="aspectFill"></image>
+          </view>
+          <view class="user-details">
+            <view class="username">{{userInfo.nickname || '用户'}}</view>
+            <view class="user-id">账号: {{userInfo.openid || ''}}</view>
+          </view>
+        </view>
+      </block>
+    </view>
+    
+    <!-- Subscription Section -->
+    <view class="settings-section" wx:if="{{isLogin}}">
+      <view class="section-title">会员状态</view>
+      <view class="subscription-info">
+        <view class="info-row">
+          <text class="info-label">当前方案：</text>
+          <text class="info-value">{{subscription.planName ? subscription.planName : '已过试用期，请联系客服'}}</text>
+        </view>
+        <view class="info-row">
+          <text class="info-label">当前方案到期时间：</text>
+          <text class="info-value">{{subscription.formattedExpiryDate}}</text>
+        </view>
+        <view class="info-row" wx:if="{{subscription.nextExpiresAt}}">
+          <text class="info-label">下一期到期时间：</text>
+          <text class="info-value">{{subscription.formattedNextExpiryDate}}</text>
+        </view>
+      </view>
+      
+      <button class="action-button" bindtap="onTapSubscribe" wx:if="{{availableActions.length > 0 && !isIOS}}">
+        续费升级会员
+      </button>
+    </view>
+    
+    <!-- Settings Section -->
+    <view class="settings-section">
+      <view class="section-title">应用设置</view>
+            
+      <!-- Daily GL Goal -->
+      <view class="setting-item" bindtap="onTapGLGoal">
+        <view class="setting-label">每日GL目标</view>
+        <view class="setting-value">
+          {{settings.dailyGLGoal}}
+          <text class="arrow">→</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- Support Section -->
+    <view class="settings-section">
+      <view class="section-title">支持</view>
+      
+      <!-- About -->
+      <view class="setting-item" bindtap="onTapAbout">
+        <view class="setting-label">关于</view>
+        <view class="setting-value">
+          <text>版本 {{appInfo.version}}</text>
+          <text wx:if="{{appInfo.isDev}}"> (体验版)</text>
+          <text class="arrow">→</text>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{isLogin}}">
+      <button class="contact-support-official" open-type="contact">
+        联系客服
+      </button>
+      <button class="logout-button" bindtap="onTapLogout">
+        退出登录
+      </button>
+    </view>
+  </view>
+  
+  <view class="loading" wx:else>
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+</view>

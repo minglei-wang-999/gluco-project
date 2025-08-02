@@ -1,0 +1,92 @@
+<!-- pages/subscription/index.wxml -->
+<view class="subscription-page">
+  <nav-header title="会员订阅" showBackButton="true"/>
+
+  <block wx:if="{{!isLoading}}">
+    <view class="plan-selector">
+      <view class="plan-selector-title">选择订阅方案</view>
+      
+      <block wx:if="{{!plansLoading}}">
+        <block wx:if="{{plansError}}">
+          <view class="error-container">
+            <view class="error-message">{{plansError}}</view>
+            <button class="retry-button" bindtap="onRetry">重试</button>
+          </view>
+        </block>
+        
+        <block wx:else>
+          <block wx:if="{{plans.length > 0}}">
+            <view class="plans-container">
+              <view wx:for="{{plans}}" 
+                    wx:key="id" 
+                    class="plan-card {{item.id === 'yearly' ? 'recommended' : ''}}">
+                
+                <view class="plan-header">
+                  <text class="plan-name">{{item.name}}</text>
+                  <text wx:if="{{item.id === 'yearly'}}" class="plan-tag">推荐</text>
+                </view>
+
+                <view class="price-action-row">
+                  <view class="plan-price">
+                    <text class="currency">¥</text>
+                    <text class="amount">{{item.price}}</text>
+                    <block wx:if="{{item.id === 'yearly'}}">
+                      <text class="price-period">/年</text>
+                      <text class="price-saving">省17%</text>
+                    </block>
+                    <block wx:elif="{{item.id === 'monthly'}}">
+                      <text class="price-period">/月</text>
+                    </block>
+                  </view>
+
+                  <button class="plan-button" 
+                          bindtap="onPlanSelected" 
+                          data-plan="{{item}}">
+                    去支付
+                  </button>
+                </view>
+
+                <view class="plan-description">{{item.description}}</view>
+
+                <view class="plan-features">
+                  <view wx:for="{{item.features}}" 
+                        wx:key="*this"
+                        wx:for-item="feature"
+                        class="feature-item">
+                    <text class="feature-icon">✓</text>
+                    <text class="feature-text">{{feature}}</text>
+                  </view>
+                </view>
+
+                <view class="upgrade-info">
+                  <text class="upgrade-text">{{item.action === 'upgrade' ? '升级' : '续费'}}所需支付：</text>
+                  <text class="upgrade-price">¥{{item.payment}}</text>
+                </view>
+              </view>
+            </view>
+          </block>
+          <block wx:else>
+            <view class="no-upgrades-container">
+              <view class="no-upgrades-message">您当前已是最高级别的会员</view>
+            </view>
+          </block>
+        </block>
+      </block>
+
+      <view class="loading" wx:else>
+        <view class="loading-spinner"></view>
+        <text>加载中...</text>
+      </view>
+
+      <view class="support-info">
+        <text>如遇问题，请</text>
+        <text class="support-link" bindtap="onContactSupport">联系客服</text>
+      </view>
+    </view>
+  </block>
+
+  <view class="loading" wx:else>
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+</view> 

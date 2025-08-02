@@ -1,0 +1,7 @@
+assets/
+.DS_Store
+node_modules/
+ux-design/
+reference/
+project.private.config.json
+security/

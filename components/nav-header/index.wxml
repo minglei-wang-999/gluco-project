@@ -1,0 +1,21 @@
+<view class="header">
+  <view class="header-content">
+    <view class="title-section">
+      <view wx:if="{{showBack}}" class="back-button" bindtap="onBack">
+        <text class="back-icon">←</text>
+        <text>返回</text>
+      </view>
+      <text class="title">{{title}}</text>
+    </view>
+    
+    <view wx:if="{{showDate}}" class="date-nav">
+      <view class="date-nav-button" bindtap="onPrev">
+        <text class="nav-icon">←</text>
+      </view>
+      <text class="current-date">{{currentDate}}</text>
+      <view class="date-nav-button" bindtap="onNext">
+        <text class="nav-icon">→</text>
+      </view>
+    </view>
+  </view>
+</view> 

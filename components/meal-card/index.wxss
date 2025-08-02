@@ -1,0 +1,96 @@
+.meal-card {
+  display: flex;
+  border-left: 4px solid #60A5FA;
+  padding-left: 12px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  margin-bottom: 12px;
+}
+
+.meal-time {
+  width: 150rpx;
+  display: flex;
+  flex-direction: column;
+  font-size: 24rpx;
+  color: #6B7280;
+}
+
+.gl-value {
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.gl-value.high {
+  color: #EF4444;
+}
+
+.gl-value.medium {
+  color: #F59E0B;
+}
+
+.gl-value.low {
+  color: #10B981;
+}
+
+.warning-icon {
+  display: inline-block;
+  width: 16rpx;
+  height: 16rpx;
+  background-color: #EF4444;
+  color: white;
+  text-align: center;
+  line-height: 16rpx;
+  font-size: 12rpx;
+  border-radius: 50%;
+  margin-left: 4px;
+}
+
+.meal-details {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.meal-image {
+  width: 80rpx;
+  height: 80rpx;
+  margin-right: 16rpx;
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+
+.meal-image image {
+  width: 100%;
+  height: 100%;
+}
+
+.meal-info {
+  flex: 1;
+}
+
+.meal-name-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.meal-name {
+  font-weight: 500;
+}
+
+.meal-type-icon {
+  width: 32rpx;
+  height: 32rpx;
+  margin-left: 8rpx;
+}
+
+.meal-items {
+  font-size: 24rpx;
+  color: #6B7280;
+}
+
+.warning-text {
+  font-size: 24rpx;
+  color: #EF4444;
+  margin-top: 4px;
+} 

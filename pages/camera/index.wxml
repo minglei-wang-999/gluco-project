@@ -1,0 +1,201 @@
+<view class="container">
+  <nav-header 
+    title="记录" 
+    showDate="{{false}}" 
+  />
+
+  <view class="content">
+    <!-- Hidden canvas for image resizing -->
+    <canvas canvas-id="resizeCanvas" style="width: 800px; height: 800px; position: absolute; left: -9999px; top: -9999px;"></canvas>
+    
+    <!-- Camera and controls panel -->
+    <view class="panel">
+      <!-- Camera preview at the top with buttons inside -->
+      <view class="camera-container">
+        <!-- Camera view -->
+        <camera 
+          device-position="back" 
+          flash="auto" 
+          binderror="error" 
+          style="width: 100%; height: 100%;" 
+          wx:if="{{isCameraActive && !capturedImage}}"
+          id="camera">
+        </camera>
+        
+        <!-- Captured image view -->
+        <image wx:if="{{capturedImage}}" src="{{capturedImage}}" mode="aspectFill" style="width: 100%; height: 100%;"></image>
+        
+        <!-- Centered camera button (only shown when camera is not active) -->
+        <view class="camera-button-container" wx:if="{{!isCameraActive}}">
+          <view class="camera-button" bindtap="takePhoto">
+            <image src="/images/icon-camera.svg" mode="aspectFit"></image>
+          </view>
+          <text class="camera-text">点击此处拍照</text>
+        </view>
+        
+        <!-- Capture button (only shown when camera is active) -->
+        <view class="capture-button-container" wx:if="{{isCameraActive}}">
+          <view class="capture-button" bindtap="capturePhoto">
+            <image src="/images/icon-camera.png" mode="aspectFit"></image>
+          </view>
+        </view>
+        
+        <!-- Gallery button in bottom right -->
+        <view class="gallery-button-container">
+          <view class="gallery-button" bindtap="openGallery">
+            <image src="/images/icon-album.svg" mode="aspectFit"></image>
+          </view>
+        </view>
+      </view>
+      
+      <!-- Controls section -->
+      <view class="controls-section">
+        <!-- Analysis button - only shown when no analysis is complete or a new image is selected -->
+        <view class="analyze-button {{taskId && (taskStatus === 'pending' || taskStatus === 'processing') ? 'analyze-button-processing' : ''}} {{!isSubscriptionActive ? 'analyze-button-disabled' : ''}}" 
+              bindtap="{{isSubscriptionActive ? 'analyzeImageAsync' : 'showSubscriptionRequired'}}"
+              wx:if="{{capturedImage && (!analysisResult || lastProcessedImage !== capturedImage)}}">
+          <view wx:if="{{taskId && (taskStatus === 'pending' || taskStatus === 'processing')}}" class="progress-fill" style="width: {{taskProgress}}%;"></view>
+          <text wx:if="{{!(taskId && (taskStatus === 'pending' || taskStatus === 'processing'))}}">分析</text>
+          <text wx:else>{{taskProgress === 0 ? '准备中...' : '处理中 ' + taskProgress + '%'}}</text>
+        </view>
+        
+        <!-- AI Analysis Tip - always shown -->
+        <view class="tips-card">
+          <view class="tips-icon">
+            <text>ⓘ</text>
+          </view>
+          <view class="tips-content">
+            <text>人工智能分析结果可能存在错误，仅谨慎参考。</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- Analysis Results Section -->
+    <view id="analysis-panel" class="panel analysis-panel">
+      <!-- Ingredients List Section -->
+      <view class="ingredients-list">
+        <view class="ingredients-list-header">
+          <view class="analysis-section-title">
+            <text>食材成分</text>
+          </view>
+        
+          <!-- Date/time selector -->
+          <view class="time-selector">
+            <view class="time-icon">
+              <image src="/images/icon-clock.svg" mode="aspectFit"></image>
+            </view>
+            <view class="time-picker-container">
+              <picker mode="time" value="{{timeValue}}" bindchange="bindTimeChange">
+                <view class="time-picker-view">
+                  <text>{{mealTime}}</text>
+                  <text class="dropdown-icon">▼</text>
+                </view>
+              </picker>
+            </view>
+          </view>
+        </view>
+
+        <!-- Ingredients Table Header -->
+        <view class="ingredients-table-header">
+          <text class="ingredient-name-header">食材</text>
+          <text class="ingredient-portion-header">份量</text>
+          <text class="ingredient-gi-header">GI值</text>
+          <text class="ingredient-action-header"></text>
+        </view>
+        
+        <!-- Ingredients List Items -->
+        <view class="ingredients-list-container">
+          <view class="ingredient-item" wx:for="{{analysisResult.ingredients}}" wx:key="id">
+            <!-- Ingredient name (editable if new or being edited, otherwise tappable to edit) -->
+            <view class="ingredient-name" wx:if="{{item.isNew || item.id === editingIngredientId}}">
+              <input class="inline-input" placeholder="输入食材名称" value="{{item.name}}" 
+                     bindinput="updateIngredientName" bindblur="finishEditingPortion" data-ingredient-id="{{item.id}}"/>
+            </view>
+            <text class="ingredient-name" wx:else bindtap="editIngredientPortion" data-ingredient-id="{{item.id}}">{{item.name}}</text>
+            
+            <!-- Portion (editable if editing an existing ingredient, hidden if new) -->
+            <view class="ingredient-portion" wx:if="{{item.id === editingIngredientId && !item.isNew}}">
+              <view class="portion-adjuster-inline">
+                <view class="portion-decrease" catchtap="decreasePortionInline" data-ingredient-id="{{item.id}}">-</view>
+                <input class="portion-input" type="number" placeholder="0" value="{{item.portion}}" 
+                       bindinput="updateIngredientPortionValue" bindblur="finishEditingPortion" data-ingredient-id="{{item.id}}"/>
+                <text class="portion-unit">g</text>
+                <view class="portion-increase" catchtap="increasePortionInline" data-ingredient-id="{{item.id}}">+</view>
+              </view>
+            </view>
+            <view class="ingredient-portion" wx:elif="{{!item.isNew}}" bindtap="editIngredientPortion" data-ingredient-id="{{item.id}}">
+              <text>{{item.portion}}g</text>
+              <text class="edit-icon">✎</text>
+            </view>
+            <view class="ingredient-portion" wx:else>
+              <!-- Empty placeholder for new ingredients -->
+              <text class="pending-text">待分析</text>
+            </view>
+            
+            <!-- GI value - show loading icon when loading, otherwise show GI value -->
+            <view class="ingredient-gi gi-{{item.giCategoryClass}}">
+              <block wx:if="{{item.isLoading}}">
+                <view class="loading-spinner"></view>
+              </block>
+              <block wx:elif="{{!(item.isPending || item.gi === 'pending')}}">
+                {{item.gi}}
+              </block>
+            </view>
+            
+            <!-- Delete button -->
+            <view class="ingredient-delete" bindtap="deleteIngredient" data-ingredient-id="{{item.id}}">
+              <text>×</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- Add ingredient button -->
+        <view class="add-ingredient-button" bindtap="addNewIngredient">
+          <text>+</text>
+        </view>
+
+        <!-- Total GL Summary -->
+        <view class="total-gl-summary" wx:if="{{analysisResult.ingredients.length > 0}}">
+          <text class="total-gl-label">总GL值</text>
+          <view class="gl-value-container">
+            <text class="total-gl-value {{totalGlClass}}" wx:if="{{!hasPendingIngredients && !(taskId && (taskStatus === 'pending' || taskStatus === 'processing'))}}">
+              {{analysisResult.total_gl}}
+            </text>
+            <view class="reanalysis-button" bindtap="onSubmitComment" wx:if="{{hasPendingIngredients && !(taskId && (taskStatus === 'pending' || taskStatus === 'processing'))}}">
+              <text>重新分析</text>
+            </view>
+            <view class="processing-indicator" wx:if="{{taskId && (taskStatus === 'pending' || taskStatus === 'processing')}}">
+              <view class="loading-spinner"></view>
+              <text class="processing-text">{{taskProgress === 0 ? '准备中...' : '处理中 ' + taskProgress + '%'}}</text>
+            </view>
+          </view>
+        </view>
+        
+        <!-- Empty state when no ingredients -->
+        <view class="empty-ingredients" wx:if="{{ingredientsList.length === 0}}">
+          <text>暂无食材，请点击"+"添加</text>
+        </view>
+
+      </view>
+      
+      <!-- Ingredient Details Panel - Removed in favor of inline editing -->
+      
+      <!-- Record Button -->
+      <view class="record-button-container">
+        <view class="record-button" bindtap="recordMeal">
+          <text>记录到饮食日志</text>
+        </view>
+      </view>
+
+      <!-- Text Analysis Section -->
+      <view class="text-analysis" wx:if="{{analysisResult}}">
+        <view class="analysis-section-title">点评</view>
+        <view class="analysis-content">
+          <text>{{analysisResult.notes}}</text>
+        </view>
+      </view>
+
+    </view>
+  </view>
+</view> 

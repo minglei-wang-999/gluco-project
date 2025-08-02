@@ -1,0 +1,150 @@
+<view class="container">
+  <nav-header 
+    title="{{getHeaderTitle()}}" 
+    showBack="{{logStep > 1}}" 
+    bind:back="onBack"
+  />
+  
+  <view class="content">
+    <!-- Step 1: Capture Photo -->
+    <block wx:if="{{logStep === 1}}">
+      <view class="camera-container">
+        <!-- Camera live view - only show when cameraActive is true -->
+        <camera wx:if="{{cameraActive}}" device-position="back" flash="auto" class="camera-view"></camera>
+        
+        <!-- Camera controls -->
+        <view class="camera-controls">
+          <!-- Library button (smaller, bottom right) -->
+          <view class="library-button" bindtap="onChooseFromLibrary">
+            <view class="library-icon">
+              <image src="/images/icon-album.svg" mode="aspectFit"></image>
+            </view>
+          </view>
+          
+          <!-- Capture button (larger, bottom center) -->
+          <view class="capture-button" bindtap="onTakePhoto">
+            <image src="/images/icon-camera.png" mode="aspectFit"></image>
+          </view>
+        </view>
+      </view>
+    </block>
+    
+    <!-- Step 2: Meal Analysis -->
+    <block wx:elif="{{logStep === 2}}">
+      <view class="analysis-container">
+        <canvas canvas-id="resizeCanvas" class="resize-canvas"></canvas>
+        <!-- Photo preview -->
+        <view class="photo-preview">
+          <image wx:if="{{currentPhoto}}" src="{{currentPhoto}}" mode="aspectFill"></image>
+        </view>
+        
+        <!-- Analysis results -->
+        <view class="analysis-results" wx:if="{{analysis}}">
+          <view class="analysis-summary">
+            <view class="summary-row">
+              <text>总GL值:</text>
+              <text class="value {{analysis.total_gl > 30 ? 'high' : (analysis.total_gl > 20 ? 'medium' : 'low')}}">{{analysis.total_gl}}</text>
+            </view>
+            <view class="summary-row">
+              <text>碳水化合物:</text>
+              <text class="value">{{analysis.total_carbs}}g</text>
+            </view>
+            <view class="summary-row">
+              <text>蛋白质:</text>
+              <text class="value">{{analysis.total_protein}}g</text>
+            </view>
+            <view class="summary-row">
+              <text>脂肪:</text>
+              <text class="value">{{analysis.total_fat}}g</text>
+            </view>
+          </view>
+          
+          <view class="category-indicator">
+            <text>血糖负荷分类: </text>
+            <text class="category-label {{analysis.meal_gl_category}}">{{analysis.meal_gl_category === 'high' ? '高' : (analysis.meal_gl_category === 'medium' ? '中' : '低')}}</text>
+          </view>
+          
+          <view class="impact-explanation">
+            <text>{{analysis.notes}}</text>
+          </view>
+                    
+          <view class="ingredients-title">食物成分</view>
+          <view class="ingredients-list">
+            <view wx:for="{{analysis.ingredients}}" wx:key="name" class="ingredient-item">
+              <view class="ingredient-name">
+                {{item.name}}
+                <text class="ingredient-portion" wx:if="{{item.portion}}">{{item.portion}} 克</text>
+              </view>
+              <view class="ingredient-details">
+                <text>GL: {{item.gl}}</text>
+                <text class="divider">|</text>
+                <text>碳水: {{item.carbs}}g</text>
+                <text class="divider">|</text>
+                <text>蛋白质: {{item.protein}}g</text>
+                <text class="divider">|</text>
+                <text>脂肪: {{item.fat}}g</text>
+              </view>
+            </view>
+          </view>
+          
+          <!-- User Comment Box -->
+          <view class="user-comment-section">
+            <!-- Comment Examples -->
+            <view class="comment-examples">
+              <view class="examples-title">示例：</view>
+              <view class="example-prompt">第一个食材不是米饭，是意大利面</view>
+              <view class="example-prompt">牛肉的份量太多了，应该是80克</view>
+              <view class="example-prompt">漏掉了一个食材，还有一个西红柿50克</view>
+              <view class="example-prompt">鸡蛋的量太少了，应该是两个鸡蛋</view>
+            </view>
+            
+            <view class="comment-input-container">
+              <textarea 
+                class="comment-input" 
+                placeholder="识别不准？请告诉我怎么修改..." 
+                value="{{userComment}}" 
+                bindinput="onCommentInput"
+                auto-height
+                maxlength="200"
+                cursor-spacing="20"
+              ></textarea>
+              <view class="comment-button" bindtap="onSubmitComment">
+                <text>重新分析</text>
+              </view>
+            </view>
+          </view>
+                    
+          <view class="button-container">
+            <button class="submit-button" bindtap="onNextStep">记录餐食</button>
+          </view>
+        </view>
+      </view>
+    </block>
+    
+    <!-- Step 3: Confirmation -->
+    <block wx:elif="{{logStep === 3}}">
+      <view class="confirmation-container">
+        <view class="success-icon">✓</view>
+        <view class="success-title">餐食已记录</view>
+        <view class="success-message">您的餐食数据已成功保存，并将反映在您的每日摄入统计中。</view>
+        
+        <view class="gl-indicator">
+          <text>餐食GL值: </text>
+          <text class="gl-value {{analysis.total_gl > 30 ? 'high' : (analysis.total_gl > 20 ? 'medium' : 'low')}}">{{analysis.total_gl}}</text>
+        </view>
+        
+        <view class="button-container">
+          <button class="back-button" bindtap="onFinish">返回首页</button>
+        </view>
+      </view>
+    </block>
+  </view>
+  
+  <!-- Loading Overlay -->
+  <view class="loading-overlay" wx:if="{{isLoading}}">
+    <view class="loading-content">
+      <view class="loading-spinner"></view>
+      <text>处理中...</text>
+    </view>
+  </view>
+</view> 
