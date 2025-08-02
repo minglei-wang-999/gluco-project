@@ -1,0 +1,44 @@
+[
+  {
+    "aliases": ["米饭", "白米饭"],
+    "carbs_per_100g": 28.0,
+    "protein_per_100g": 2.4,
+    "fat_per_100g": 0.3,
+    "gi": "75"
+  },
+  {
+    "aliases": ["面条", "炒面"],
+    "carbs_per_100g": 26.0,
+    "protein_per_100g": 4.5,
+    "fat_per_100g": 0.7,
+    "gi": "55"
+  },
+  {
+    "aliases": ["意面", "意大利面"],
+    "carbs_per_100g": 25.0,
+    "protein_per_100g": 5.0,
+    "fat_per_100g": 1.1,
+    "gi": "45"
+  },
+  {
+    "aliases": ["米粉", "米线"],
+    "carbs_per_100g": 25.0,
+    "protein_per_100g": 1.5,
+    "fat_per_100g": 0.3,
+    "gi": "65"
+  },
+  {
+    "aliases": ["河粉", "沙河粉"],
+    "carbs_per_100g": 22.0,
+    "protein_per_100g": 1.3,
+    "fat_per_100g": 0.2,
+    "gi": "65"
+  },
+  {
+    "aliases": ["荞麦面"],
+    "carbs_per_100g": 25.0,
+    "protein_per_100g": 6.0,
+    "fat_per_100g": 1.0,
+    "gi": "50"
+  }
+]

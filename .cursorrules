@@ -1,0 +1,10 @@
+- Using poetry to manage dependencies. don't use pip install. DON'T ADD PACKAGES DIRECTLY TO THE pyproject.toml file. Use poetry add instead.
+- Use double quotes for strings in python code. 
+- Use pytest for testing and create test class instead of single test functions
+- Before making a migration, make sure to run the migration first to sync the database with the code and then run the tests to make sure the migration is working as expected.
+- When you were asked to implement a feature or change something, following the order of 
+    1. Updating the test first
+    2. Try to implement the code and make sure they pass the tests. When there is an error, fix the code first, then the test ONLY if needed.
+    3. the migration be the last step optional.
+- Always run the tests before checking in your code.
+- PR Description: Start with a one-line summary, then use sections (Changes, Testing, Required Environment Variables, Notes) with bullet points using • character. Keep sections separated by single blank line, no markdown headers.
